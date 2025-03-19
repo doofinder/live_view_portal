@@ -17,6 +17,12 @@
     "package.json",
     "assets/js/dist/live_view_portal.js"
   ],
+  "author": "Doofinder",
+  "contributors": [
+    "Víctor Fernández <victor.fernandez@doofinder.com>",
+    "David Morales <david.morales@doofinder.com>",
+    "Héctor Pérez <hector@doofinder.com>"
+  ],
   "dependencies": {
     "esbuild": "^0.23.1",
     "esbuild-plugin-alias": "^0.2.1",
