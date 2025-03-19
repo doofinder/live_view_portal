@@ -2,16 +2,16 @@
 
 ## Imports
 
-You can clone the repo and run the following to get the bundled library:
+First install `live_view_portal`. 
 
 ```bash
-npm install && npm assets:build:dev
+npm install live_view_portal --prefix assets
 ```
 
-Then, to import it into your project you can copy the built asset and reference to it.
+Then, import it into the script that will load the portal. Let's call that file `portal.js`.
 
 ```javascript
-import { LivePortal, deadMount } from "./live_view_portal.js";
+import { LivePortal, deadMount } from "live_view_portal";
 ```
 
 ## LivePortal
@@ -21,8 +21,7 @@ do this for production, where you can abstract it the way you prefer. We also ne
 served.
 
 ```javascript
-let livePortal;
-const lvUrl = "http://localhost:9823/embed/initial";
+const lvUrl = "http://localhost:4000/embed/initial";
 ``` 
 
 ### deadMount
@@ -41,17 +40,17 @@ The first argument that the `LivePortal` constructor expects is the result of `d
 - `appName`: mirrors the `data-app` attribute we defined back in the [LiveView](view.html).
 - [`hooks`][1] 
 - `lvUrl`. (defined above) 
-- `socketUrl`. `Phoenix.Endpoint.socket/3` full url.
+- `socketUrl`. `Phoenix.Endpoint.socket/3` full url. In our case we set the path before to `/live-portal`.
 
 For more information, you can check the `LivePortal` documentation in [its implementation][2].
 
 ```javascript
 const mountPoint = await deadMount(lvUrl, "initial");
-livePortal = new LivePortal(mountPoint.shadowRoot, {
+const livePortal = new LivePortal(mountPoint.shadowRoot, {
   appName: "initial",
   hooks: Hooks,
   lvUrl,
-  socketUrl: "http://localhost:9823/live"
+  socketUrl: "http://localhost:4000/live-portal"
 });
 ```
 
@@ -93,7 +92,7 @@ Hooks.Closer = {
 // The script creates a trigger button with a click
 // eventListener. When the event is fired, performs double mount.
 
-const lvUrl = "http://localhost:9823/embed/initial";
+const lvUrl = "http://localhost:4000/embed/initial";
 let livePortal;
 
 function setup() {
@@ -107,7 +106,7 @@ function setup() {
       appName: "initial",
       hooks: Hooks,
       lvUrl,
-      socketUrl: "http://localhost:9823/live"
+      socketUrl: "http://localhost:4000/live-portal"
     });
 
     livePortal.connect(() => {});

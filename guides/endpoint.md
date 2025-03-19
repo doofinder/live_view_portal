@@ -34,7 +34,7 @@ be a requirement in the future.
 You can use an existing plug library for this like `Corsica` or roll out your own plug. Let's see how we could use Corsica:
 
 ```elixir
-@allowed_origins ["http://localhost:9898", "https://myfirstclient.com"]
+@allowed_origins ["http://localhost:9000", "https://myfirstclient.com"]
 
 # This plug has to be defined before any Plug.Static or MyAppWeb.Router
 plug Corsica, 
@@ -48,7 +48,7 @@ This will check only HTTP requests. Sockets have to check the origin on their ow
 
 You can define a list of allowed origins. 
 
-> #### Tip {: .tip}
+> [!TIP]
 >
 > In your app case, you probably want to check the origin depending on some other connection info. You are highly
 > encouraged to implement your own `Plug`. That way you can make it check HTTP requests and also socket connections.   
@@ -59,10 +59,11 @@ Here you can just use the normal `Phoenix.LiveView.Socket`. Reusing the origins 
 `check_origin` option.
 
 See the [common configuration][5] for all transports for more info on the `check_origin` option. As noted before, when
-your app grows complex just implement your own plug to have all information that you need available.
+your app grows complex just implement your own plug to have all information that you need available. Let's also set the
+path to `/live-portal` to separate from common LiveViews in `/live`.
 
 ```elixir
-socket "/live", Phoenix.LiveView.Socket,
+socket "/live-portal", Phoenix.LiveView.Socket,
   websocket: [
     check_origin: @allowed_origins,
     connect_info: [session: @session_options],
