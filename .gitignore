@@ -1,0 +1,20 @@
+/_build
+/cover
+/deps
+/doc
+/.fetch
+erl_crash.dump
+*.ez
+*.beam
+/config/*.secret.exs
+.elixir_ls/
+
+# js
+
+/assets/node_modules
+/assets/js/dist/**
+node_modules
+coverage
+
+/assets/meta.json
+/priv/static/live_view_portal.*

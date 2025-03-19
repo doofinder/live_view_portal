@@ -1,0 +1,42 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  js_checks:
+    name: OTP ${{matrix.otp}} / Elixir ${{matrix.elixir}}
+    runs-on: ubuntu-24.04
+
+    env:
+      MIX_ENV: test
+    strategy:
+      matrix:
+        elixir: [1.17.3]
+        otp: [27.0]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.12
+          cache: "npm"
+
+      - name: Install JS Dependencies
+        run: npm ci
+
+      - name: Install LV JS Dependencies
+        run: npm install
+        working-directory: ./assets/phoenix_live_view
+
+      - name: Run JS Formatter (Prettier)
+        run: npx prettier --check "**/*.js"
+
+      - name: Test Phoenix LiveView
+        run: npm run test
+        working-directory: ./assets/phoenix_live_view
+
+      - name: Lint errors Phoenix LiveView
+        run: npm run lint
+        working-directory: ./assets/phoenix_live_view

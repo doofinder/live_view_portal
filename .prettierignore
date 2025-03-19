@@ -1,0 +1,4 @@
+assets/js/node_modules/**
+assets/js/dist/**
+assets/phoenix_live_view/**
+guides/**
