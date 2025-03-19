@@ -2,12 +2,18 @@
   "name": "live_view_portal",
   "version": "0.1.4-lv1.0.2",
   "module": "./assets/js/dist/live_view_portal.js",
+  "license": "MIT",
   "exports": {
     ".": "./assets/js/dist/live_view_portal.js",
     "./live_view": "./assets/js/dist/phoenix_live_view.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/doofinder/live_view_portal.git"
+  },
   "files": [
     "README.md",
+    "LICENSE.md",
     "package.json",
     "assets/js/dist/live_view_portal.js"
   ],
