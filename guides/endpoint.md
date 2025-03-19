@@ -4,6 +4,8 @@ The LiveView endpoint must be reachable from cross-site origins. This requires t
 origin. Also, we need to use the defaults that liveview provides us to use an anti-CSRF token. Under the hood, Phoenix
 uses `Plug.CSRFProtection`.
 
+Let's add some modifications to `MyAppWeb.Endpoint`.
+
 ## Session
 
 In this case, we use a session cookie. These are the options:
@@ -14,7 +16,7 @@ In this case, we use a session cookie. These are the options:
   key: "_test_lv_key",
   signing_salt: "p7w6gssN",
   secure: true,
-  same_site: "None; Secure",
+  same_site: "None",
   extra: "Partitioned"
 ]
 ```
@@ -23,7 +25,7 @@ Because we need the browser to send the cookie on cross-site requests — reques
 following options: 
 
 - `secure: true`. 
-- `same-site: "None; Secure"`
+- `same-site: "None"`
 - `extra: "Partitioned"`. Some [links][1] to [read][2] on [this][3].
 
 At the time of writing this, `Partitioned` is not yet fully [supported][4] across all browsers, but Chrome warns that it will
