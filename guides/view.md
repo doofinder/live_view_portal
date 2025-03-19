@@ -51,4 +51,4 @@ def live_view_portal(opts) when is_list(opts) do
 end
 ```
 
-Finally, let's move on [the client side](js.html).
+Finally, let's move on [the client side](js.md).

@@ -70,7 +70,7 @@ socket "/live", Phoenix.LiveView.Socket,
   ]
 ```
 
-We are now ready to [implement our view](view.html).
+We are now ready to [implement our view](view.md).
 
 
 [1]: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie#partitioned
