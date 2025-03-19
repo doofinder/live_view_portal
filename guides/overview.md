@@ -14,4 +14,4 @@ Main points we will see in this guide:
 
 This guide supposes you have an already setup Phoenix application with LiveView.
 
-Let's first check [how to set up the `Phoenix.Router` to serve our portal](router.html). 
+Let's first check [how to set up the `Phoenix.Router` to serve our portal](router.md). 

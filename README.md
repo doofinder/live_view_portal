@@ -4,28 +4,30 @@ Embed [`LiveView`][1]s in web pages through `LivePortal`s.
 
 ## Usage
 
-This library is bundled as a module and you can just include it in your portal's bundle.
+First install `live_view_portal` in your Phoenix application: 
+
+```bash
+npm install live_view_portal --prefix assets
+```
+
+Import into your desired javascript file.
+
+```javascript
+import { LivePortal, deadMount } from "live_view_portal";
+```
 
 By default, portal uses a shadow DOM. You can disable it by setting `useShadowDOM` to `false`
 in the `deadMount` function and the `LivePortal` class.
 
-### Development
+## Development
 
 1. Run `npm run build` to bundle js.
 2. Copy the built file from `assets/js/dist/live_view_portal.js` to your LiveView app under `assets/vendor`.
 3. `import ../vendor/live_view_portal.js`.
 
-## Deploy
+## Guide
 
-When a new version is ready, follow these steps:
-
-1. Make sure all references to the version in the code and docs are updated.
-2. Create a lightweight `git tag` and push it:
-
-```bash
-git tag v0.1.0-lv1.0.2
-git push --tags
-```
+You can check out [the guide](guides/overview.md) to setup your first app with LiveViewPortal.
 
 ## Architecture
 
@@ -70,10 +72,5 @@ We have decided to adopt the following versioning format: **X.X.X-lvY.Y.Y**, whe
 
 - **Major Version Updates**: If the LiveView version is upgraded within its major version (e.g., from 1.5.0 to 2.0.0), we will increment the major version of our app.
 
-## Docs
-
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at <https://hexdocs.pm/live_view_portal>.
 
 [1]: https://github.com/phoenixframework/phoenix_live_view

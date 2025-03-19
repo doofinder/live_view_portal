@@ -34,4 +34,4 @@ Now, let's route paths inside `/portal` through our newly created pipeline:
 
 Here we define the `Phoenix.LiveView.Router.live/4` that routes our portal.
 
-Let's move on to the [Endpoint configuration](endpoint.html).
+Let's move on to the [Endpoint configuration](endpoint.md).
