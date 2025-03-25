@@ -3,7 +3,7 @@ defmodule LiveViewPortal.MixProject do
 
   @source_url "https://github.com/doofinder/live_view_portal"
   # The version is the same as the one in package.json
-  @version "0.1.4-lv1.0.2"
+  @version "0.1.5-lv1.0.2"
 
   def project do
     [

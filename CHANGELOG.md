@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.5-lv1.0.2] - 2025-03-18
+
+### Changed
+
+- Move esbuild to devDependencies. [`1a2d14f`](https://github.com/doofinder/live_view_portal/commit/1a2d14f6220c26631be4848d45807db8a3adf732)
+- Add missing section to guide regarding layout. [`3ef351c`](https://github.com/doofinder/live_view_portal/commit/3ef351c66df53c2324edbeb89a538a3702d8f59e)
+
+
 ## [0.1.4-lv1.0.2] - 2025-03-18
 
 ### Changed

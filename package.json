@@ -1,6 +1,6 @@
 {
   "name": "live_view_portal",
-  "version": "0.1.4-lv1.0.2",
+  "version": "0.1.5-lv1.0.2",
   "module": "./assets/js/dist/live_view_portal.js",
   "license": "MIT",
   "exports": {
