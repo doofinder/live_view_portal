@@ -49,4 +49,20 @@ def live_view_portal(opts \\ []) do
 end
 ```
 
+## Portal layout
+
+The last step needed here is to create the layout for portal apps. It is very simple, as we only need two things:
+
+- **CSRF token**. This is included by default inside the `<head>` element in the root layout, but we are not using that
+  here.
+- **CSS stylesheet**. We need to load the stylesheet inside the Shadow DOM.
+
+`lib/myapp_web/components/layouts/portal.html.heex`:
+```heex
+<meta itemprop="csrf-token" content={get_csrf_token()} />
+<link phx-track-static rel="stylesheet" href="http://localhost:4000/assets/app.css" />
+<%= @inner_content %>
+```
+
+
 Finally, let's move on [the client side](js.md).
