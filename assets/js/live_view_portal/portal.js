@@ -78,7 +78,7 @@ export class LivePortal {
       );
     }
 
-    const csrfTokenElement = root.querySelector("meta[itemprop='csrf-token']");
+    const csrfTokenElement = root.querySelector("div[name='csrf-token']");
     if (!csrfTokenElement) {
       throw new Error("CSRF token not found in the provided root element.");
     }
