@@ -19,9 +19,12 @@ export class LivePortal {
    * @param {boolean} [opts.useShadowDOM=true] - Whether to use Shadow DOM (true)
    * or regular DOM (false) for isolation.
    *
-   * @param {Object} [opts.extraParams] - Socket extra connection params. They
-   * will be available in `mount/3` under `socket.private.connect_params`, only
-   * for the *live* mount.
+   * @param {Object|Function} [opts.extraParams] - Socket connection params,
+   * given as an object or as a function returning one. The function receives
+   * the LiveView container element and is called on every join, so params can
+   * be recomputed per connection.
+   * Overrides `opts.params`, injecting the csrf token into the resulting
+   * object.
    *
    * @param {string} [opts.lvUrl] - Portal LiveView full route url.
    * For example:
@@ -87,9 +90,16 @@ export class LivePortal {
     opts = {
       externalHref: opts.lvUrl,
       rootViewSelector: `[data-app='${opts.appName}']`,
-      params: { _csrf_token: csrfToken, ...opts.extraParams },
       domRoot: root,
       ...opts,
+      params: (el) => {
+        const extraParams =
+          typeof opts.extraParams === "function"
+            ? opts.extraParams(el)
+            : opts.extraParams;
+
+        return { _csrf_token: csrfToken, ...extraParams };
+      },
     };
 
     this.liveSocket = new LiveSocket(opts.socketUrl, Socket, opts);
