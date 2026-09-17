@@ -11,6 +11,7 @@ import {
   TITLE,
   STREAM,
   ROOT,
+  KEYED,
 } from "./constants"
 
 import {
@@ -281,7 +282,16 @@ export default class Rendered {
 
   templateStatic(part, templates){
     if(typeof (part) === "number"){
-      return templates[part]
+      if(templates && templates[part] !== undefined) {
+        return templates[part]
+      } else {
+        // Check if templates are in the rendered.p (static parts) - LiveView 1.1 compatibility
+        const staticTemplates = this.rendered.p
+        if(staticTemplates && staticTemplates[part] !== undefined) {
+          return staticTemplates[part]
+        }
+        return part
+      }
     } else {
       return part
     }
@@ -299,6 +309,7 @@ export default class Rendered {
   // and no individual element is tracked inside the comprehension.
   toOutputBuffer(rendered, templates, output, changeTracking, rootAttrs = {}){
     if(rendered[DYNAMICS]){ return this.comprehensionToBuffer(rendered, templates, output) }
+    if(rendered[KEYED]){ return this.comprehensionToBufferKeyed(rendered, templates, output) }
     let {[STATIC]: statics} = rendered
     statics = this.templateStatic(statics, templates)
     let isRoot = rendered[ROOT]
@@ -312,10 +323,14 @@ export default class Rendered {
       rendered.magicId = this.nextMagicID()
     }
 
-    output.buffer += statics[0]
-    for(let i = 1; i < statics.length; i++){
-      this.dynamicToBuffer(rendered[i - 1], templates, output, changeTracking)
-      output.buffer += statics[i]
+    if(statics){
+      if(Array.isArray(statics) && statics.length > 0){
+        output.buffer += statics[0]
+        for(let i = 1; i < statics.length; i++){
+          this.dynamicToBuffer(rendered[i - 1], templates, output, changeTracking)
+          output.buffer += statics[i]
+        }
+      }
     }
 
     // Applies the root tag "skip" optimization if supported, which clears
@@ -349,21 +364,74 @@ export default class Rendered {
     let compTemplates = templates || rendered[TEMPLATES]
     for(let d = 0; d < dynamics.length; d++){
       let dynamic = dynamics[d]
-      output.buffer += statics[0]
-      for(let i = 1; i < statics.length; i++){
-        // Inside a comprehension, we don't track how dynamics change
-        // over time (and features like streams would make that impossible
-        // unless we move the stream diffing away from morphdom),
-        // so we can't perform root change tracking.
-        let changeTracking = false
-        this.dynamicToBuffer(dynamic[i - 1], compTemplates, output, changeTracking)
-        output.buffer += statics[i]
+      if(statics && Array.isArray(statics) && statics.length > 0){
+        output.buffer += statics[0]
+        for(let i = 1; i < statics.length; i++){
+          // Inside a comprehension, we don't track how dynamics change
+          // over time (and features like streams would make that impossible
+          // unless we move the stream diffing away from morphdom),
+          // so we can't perform root change tracking.
+          let changeTracking = false
+          this.dynamicToBuffer(dynamic[i - 1], compTemplates, output, changeTracking)
+          output.buffer += statics[i]
+        }
       }
     }
 
     if(stream !== undefined && (rendered[DYNAMICS].length > 0 || deleteIds.length > 0 || reset)){
       delete rendered[STREAM]
       rendered[DYNAMICS] = []
+      output.streams.add(stream)
+    }
+  }
+
+  comprehensionToBufferKeyed(rendered, templates, output){
+    let {[KEYED]: keyed, [STATIC]: statics, [STREAM]: stream} = rendered
+    let [_ref, _inserts, deleteIds, reset] = stream || [null, {}, [], null]
+
+    statics = this.templateStatic(statics, templates)
+    let compTemplates = templates || rendered[TEMPLATES]
+
+    // Process keyed items (LiveView 1.1 structure)
+    if(keyed && typeof keyed === 'object'){
+      Object.entries(keyed).forEach(([key, item]) => {
+        // Skip the "kc" (keyed count) entry
+        if(key === 'kc') return
+
+        // Handle both array and object structures
+        if(Array.isArray(item)){
+          // Item is an array of dynamics
+          if(statics && Array.isArray(statics) && statics.length > 0){
+            output.buffer += statics[0]
+            for(let i = 1; i < statics.length; i++){
+              let changeTracking = false
+              if(item[i - 1] !== undefined){
+                this.dynamicToBuffer(item[i - 1], compTemplates, output, changeTracking)
+              }
+              output.buffer += statics[i]
+            }
+          }
+        } else if(typeof item === 'object' && item !== null){
+          // Item is an object - treat it as a single dynamic structure
+          if(statics && Array.isArray(statics) && statics.length > 0){
+            output.buffer += statics[0]
+            for(let i = 1; i < statics.length; i++){
+              let changeTracking = false
+              // For objects, try to access the dynamic by index or use the whole object
+              let dynamicValue = item[i - 1] !== undefined ? item[i - 1] : (i === 1 ? item : undefined)
+              if(dynamicValue !== undefined){
+                this.dynamicToBuffer(dynamicValue, compTemplates, output, changeTracking)
+              }
+              output.buffer += statics[i]
+            }
+          }
+        }
+      })
+    }
+
+    if(stream !== undefined && (Object.keys(keyed || {}).length > 0 || deleteIds.length > 0 || reset)){
+      delete rendered[STREAM]
+      rendered[KEYED] = {}
       output.streams.add(stream)
     }
   }

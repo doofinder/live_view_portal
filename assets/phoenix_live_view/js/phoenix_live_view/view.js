@@ -694,7 +694,12 @@ export default class View {
       // Don't skip any component in the diff nor any marked as pruned
       // (as they may have been added back)
       let cids = diff ? this.rendered.componentCIDs(diff) : null
-      let [html, streams] = this.rendered.toString(cids)
+      let html, streams
+      try {
+        [html, streams] = this.rendered.toString(cids)
+      } catch (error) {
+        throw error
+      }
       return [`<${tag}>${html}</${tag}>`, streams]
     })
   }
